@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Liter&family=Lora:ital,wght@0,400..700;1,400..700&family=Outfit:wght@100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <title>MovieBox</title>
+</head>
+<body class="user-page-body">
+ 
+    <div class="black-bg">
+        <img src="../images/cinema-bg.png" alt="" class="idk">
+        <header class="header">
+            <nav class="navbar">
+                <div class="container">
+                    <a href="/"><h4>Movie<span>BOX</span></h4></a>
+                    <ul role="list" class="header-list">
+                        <li class="header-li"><a href="../logout" class="flex-center">Log Out</a></li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+        <section class="user-page-section">
+            <div class="user-page-content">
+                <h2 class="user-name">
+                    <%= username %>
+                    <a href="../../add-review/<%= username %>/<%= userid  %>"><button class="add-movie-button">ADD MOVIE</button></a>
+                </h2>
+                <div class="user-forms">
+                    <div class="filter">
+                            
+                            <button class="select-filter flex-center">ORDER BY <img src="../images/down-arrow.png" alt=""></button>
+                            <div class="option-list">
+                                    <button class="filter-option" value="1">Release Date <p>↑</p></button>
+                                    <button class="filter-option" value="2">Release Date <p>↓</p></button>
+                                    <button class="filter-option" value="3">Movie Title <p>↑</p></button>
+                                    <button class="filter-option" value="4">Movie Title <p>↓</p></button>
+                                    <button class="filter-option" value="5">User Upload <p>↑</p></button>
+                                    <button class="filter-option" value="6">User Upload <p>↓</p></button>
+                                    <button class="filter-option" value="7">Author <p>↑</p></button>
+                                    <button class="filter-option" value="8">Author <p>↓</p></button>
+                                    <button class="filter-option" value="9">Box Office <p>↑</p></button>
+                                    <button class="filter-option" value="10">Box Office <p>↓</p></button>
+                                    <button class="filter-option" value="11">Ranking <p>↑</p></button>
+                                    <button class="filter-option" value="12">Ranking <p>↓</p></button>
+                            </div>
+                            
+                    </div>
+                    <div class="search-movie">
+                            <input type="text" placeholder="Search Movie..." value="" class="search-movie-input">
+                            <button type="submit" class="search-button"><%- include("../public/images/search.svg") %></button>
+                            
+                    </div>
+                </div>
+
+                <div class="user-list-container">
+                    <div class="user-list">
+                            <div class="loader-user-list">
+
+                            </div>
+                        
+
+                        <% for(let review of userReviews) { %>
+                        <a href="/<%= username %>/user-review/review-id=<%= review.id %>" class="list-item-a">
+                            <div class="list-item" >
+                                <div class="info-bg">
+                                
+                                <div class="list-img flex-center">
+                                    <img src="<%= review.poster_url %>" alt="" class="movie-poster">
+                                </div>
+                                <div class="movie-info">
+                                    <div class="list-section ">
+                                        <h5 class="movie-title"><%= review.title %></h5>
+                                        <p class="director"><span class="content-span">Author/Director: </span> <%= review.director %></p>
+                                        <p class="release-date"><span class="content-span">Release Date: </span> <%= review.release_date %></p>
+                                    </div>
+                                    <div class="list-section">
+                                        <p class="genre"><span class="content-span">Genre: </span> <%= review.genre %></p>
+                                    
+                                        <p class="actors"><span class="content-span">Cast: </span> <%= review.actors %>, ...</p>
+                                        <div class="ranking">
+                                            <% for (var i = 1; i <= review.user_rating; i++) {%>
+                                            <img src="../images/star.png" alt="">
+                                            <% } %>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="rest-info">
+                                    <div class="list-section">
+                                        <p class="user-review"><span class="content-span">Review: </span> <%= review.user_review %></p>
+                                        <p class="box-office"><span class="content-span">Box Office: </span><%= review.box_office %></p>
+                                        <p class="last-changes-applied"><span class="content-span">Last Changes: </span> <%= review.upload_date %></p>
+                                    </div>
+                                </div> 
+                                </div>       
+                            </div>
+                            
+                        </a>
+                        <% } %> 
+                        </div>
+                
+                </div>
+            </div>
+        </section>
+        <footer>
+            <div class="container">
+                <div>
+                    <p class="color-whitesmoke">Copyright © since 2025</p>
+                </div>
+                    <ul role="list" data-type="media-icons">
+                        <li><a href="#"><img src="../images/facebook.svg"></a></li>
+                        <li><a href="#"><img src="../images/instagram.svg"></a></li>
+                        <li><a href="#"><img src="../images/tiktok.svg"></a></li>
+                        <li><a href="#"><img src="../images/twitch.svg"></a></li>
+                        <li><a href="#"><img src="../images/twitter.svg"></a></li>
+                    </ul>
+            </div>
+        </footer>
+    </body>
+    </html>
+    </div>
+    <script>
+        if (document.querySelectorAll(".list-item").length === 0) {
+            document.querySelector(".user-list").innerHTML = "<p class='no-reviews-text'>THIS USER DIDN'T ADD ANY REVIEWS</p>";
+        }
+                const uploadDateLongs = document.querySelectorAll(".last-changes-applied");
+        for (let uploadDateLong of uploadDateLongs) {
+            let shortDate = uploadDateLong.innerText.split(" ").slice(3, 6).join(" ");
+            uploadDateLong.innerHTML = "<span class='content-span'>Last Changes: </span> " + shortDate;
+        }
+        document.querySelector(".filter").addEventListener("mouseover", function () {
+            document.querySelector(".option-list").style.display = "block"
+        });
+
+        document.querySelector(".filter").addEventListener("mouseout", function () {
+            document.querySelector(".option-list").style.display = "none"
+        });
+
+        document.querySelector(".option-list").addEventListener("mouseover", function () {
+            
+                document.querySelector(".select-filter").style.backgroundColor = "lightslategray"
+        });
+
+        document.querySelector(".option-list").addEventListener("mouseout", function () {
+            document.querySelector(".select-filter").style.backgroundColor = "whitesmoke"
+        });
+
+        document.querySelector(".select-filter").addEventListener("mouseover", function () {
+            document.querySelector(".select-filter").style.backgroundColor = "crimson";
+        });
+
+        document.querySelector(".select-filter").addEventListener("mouseout", function () {
+            document.querySelector(".select-filter").style.backgroundColor = "whitesmoke";
+        });
+
+        const posters = document.querySelectorAll(".list-img img");
+        const listItems = document.querySelectorAll(".list-item");
+
+        const postersArray = [];
+
+        for (let poster of posters) {
+            postersArray.push(poster.getAttribute("src"));
+        }
+
+
+        function myFunction(x) {
+            if (x.matches) { // If media query matches
+                for (var i = 0; i < listItems.length; i++) {
+                    listItems[i].style.backgroundImage = `url(${postersArray[i]})`;
+                    listItems[i].style.backgroundPosition = "center";
+                    listItems[i].style.backgroundRepeat = "no-repeat";
+                    listItems[i].style.backgroundSize = "cover";
+                    listItems[i].style.padding = "0";
+                }
+            } else {
+                for (var i = 0; i < listItems.length; i++) {
+                    listItems[i].style.backgroundImage = `none`;
+                    listItems[i].style.backgroundColor = "black";
+                    listItems[i].style.padding = "10px";
+                }
+            }
+        }
+
+
+        var x = window.matchMedia("(max-width: 400px)");
+
+        x.addEventListener("change", function() {
+            myFunction(x);
+        });
+
+
+        const orderList = document.querySelectorAll(".filter-option");
+        const userReviews = document.querySelectorAll(".list-item-a");
+
+        for (var i = 0; i < orderList.length; i++) {
+            orderList[i].addEventListener("click", function () {
+                const value = this.getAttribute("value");
+                
+                let orderButtonText = this.innerText.toUpperCase();
+                document.querySelector(".select-filter").innerHTML = orderButtonText + '<img src="../images/down-arrow.png" alt="">';
+                document.querySelector(".loader-user-list").style.display = "block";
+                
+                for (var i = 0; i < userReviews.length; i++) {
+                    userReviews[i].style.display = "none";
+                }
+                sort(value);
+
+            })
+        }
+
+
+        
+        function sort (by) {
+            let ascendingOrder = false;
+            const elements = [...document.querySelectorAll('.list-item-a')];
+            const parentElement = document.querySelector('.user-list');
+            
+
+            function monthChange (month) {
+                switch (month.toString()) {
+                    case "Jan" : return month = "01"; break;
+                    case "Feb" : return month = "02"; break;
+                    case "Mar" : return month = "03"; break;
+                    case "Apr" : return month = "04"; break;
+                    case "May" : return month = "05"; break;
+                    case "Jun" : return month = "06"; break;
+                    case "Jul" : return month = "07"; break;
+                    case "Aug" : return month = "08"; break;
+                    case "Sep" : return month = "09"; break;
+                    case "Oct" : return month = "10"; break;
+                    case "Nov" : return month = "11"; break;
+                    case "Dec" : return month = "12"; break;
+                    default: break;
+                }
+            }
+
+            const releaseDate = document.querySelectorAll(".release-date");
+            let monthR;
+            let releaseDateList;
+            let oldDateR = [];
+
+            
+
+            let dateTextR;
+            for (var i = 0; i < releaseDate.length; i++) {
+                releaseDateList = releaseDate[i].innerText.split(" ").slice(3, 6);
+                oldDateR.push(releaseDate[i].innerText.split(" ").slice(3, 6));
+                monthR = releaseDateList[1];
+                newMonthR = monthChange(monthR);
+
+                releaseDateList[1] = newMonthR;
+                releaseDateList.reverse();
+                dateTextR = releaseDateList[0] + " " + releaseDateList[1] + " " + releaseDateList[2];
+                document.querySelectorAll(".release-date")[i].innerText = dateTextR;
+                
+                
+            }
+            
+ 
+            const uploadDate = document.querySelectorAll(".last-changes-applied");
+            let monthL;
+            let dayL;
+            let yearL;
+            let dateL;
+            let uploadDateList;
+            let oldDateL = [];
+
+            let dateTextL;
+            for (var i = 0; i < uploadDate.length; i++) {
+                uploadDateList = uploadDate[i].innerText.split(" ").slice(3, 6);
+                oldDateL.push(uploadDate[i].innerText.split(" ").slice(3, 6));
+                monthL = uploadDateList[0];
+                newMonthL = monthChange(monthL);
+
+                uploadDateList[0] = newMonthL;
+                
+                dayL = uploadDateList[1];
+                let help = dayL;
+                uploadDateList[1] = uploadDateList[0];
+                uploadDateList[0] = uploadDateList[2];
+                uploadDateList[2] = help;
+
+                
+                dateTextL = uploadDateList[0] + " " + uploadDateList[1] + " " + uploadDateList[2];
+                document.querySelectorAll(".last-changes-applied")[i].innerText = dateTextL;
+               
+                
+            }       
+            
+            
+
+            let selector;
+
+
+            if (by % 2 === 0) {
+                ascendingOrder = true;
+            }
+            
+            switch (by) {
+                case "1" : case "2" : selector = element => element.querySelector(".release-date").innerText; break;
+                case "3" : case "4" : selector = element => element.querySelector(".movie-title").innerText; break;
+                case "5" : case "6" : selector = element => element.querySelector(".last-changes-applied").innerText; break;
+                case "7" : case "8" : selector = element => element.querySelector(".director").innerText; break;
+                case "9" : case "10" : selector = element => element.querySelector(".box-office").innerText; break;
+                case "11" : case "12" : selector = element => element.querySelector(".ranking").childElementCount; break;
+                default: break; 
+            }
+
+            let collator;
+
+             if (by === 3 || by === 4 || by === 7 || by === 8) {
+                collator = new Intl.Collator("de");
+             } else {
+                collator = new Intl.Collator(undefined, {numeric: true, sensitivity: 'base'});
+             }
+             setTimeout(() => {
+                    document.querySelector(".loader-user-list").style.display = "none";
+                    for (var i = 0; i < userReviews.length; i++) {
+                    userReviews[i].style.display = "block";
+                }
+                }, 800);
+            
+                
+                elements.sort((elementA, elementB) => {
+                const [firstElement, secondElement] = ascendingOrder ? [elementA, elementB] : [elementB, elementA];
+                const textOfFirstElement = selector(firstElement);
+                const textOfSecondElement = selector(secondElement);
+                return collator.compare(textOfFirstElement, textOfSecondElement);
+            }).forEach(element => parentElement.appendChild(element));
+
+
+            
+
+            for (var i = 0; i < releaseDate.length; i++) {
+                releaseDate[i].innerHTML = "<span class='content-span'>Release Date: </span> " + oldDateR[i][0] + " " + oldDateR[i][1] + " " + oldDateR[i][2];
+                uploadDate[i].innerHTML = "<span class='content-span'>Last Changes: </span> " + oldDateL[i][0] + " " + oldDateL[i][1] + " " + oldDateL[i][2];
+            }
+
+
+
+        }
+
+        const searchButton = document.querySelector(".search-button");
+        const movieTitles = document.querySelectorAll(".movie-title");
+        let searchedMovie;
+        searchButton.addEventListener("click", () => {
+            searchedMovie = document.querySelector(".search-movie-input").value;
+            document.querySelector(".loader-user-list").style.display = "block";
+            for (var i = 0; i < userReviews.length; i++) {
+                    userReviews[i].style.display = "none";
+                }
+            setTimeout(() => {
+                document.querySelector(".loader-user-list").style.display = "none";
+                for (var i = 0; i < userReviews.length; i++) {
+                    userReviews[i].style.display = "block";
+                }
+            }, 800);
+            setTimeout(() => {
+                let count = 0;
+                let reviewsCount = document.querySelectorAll(".list-item").length;
+            for (var i = 0; i < movieTitles.length; i++) {
+                let movieTitle = movieTitles[i].innerText;
+                movieTitles[i].parentNode.parentNode.parentNode.parentNode.style.display = "block";
+
+                if (!movieTitle.includes(searchedMovie)) {
+                    count++;
+                    movieTitles[i].parentNode.parentNode.parentNode.parentNode.style.display = "none";
+
+                }
+                if (count === reviewsCount) {
+                    movieTitles[i].parentNode.parentNode.parentNode.parentNode.style.display = "block";
+                    document.querySelector(".user-list").innerHTML = "<p class='no-reviews-text'>NO RESULTS FOUND</p>";
+                }
+            }
+            }, 800);
+        });
+
+        
+
+            
+    </script>

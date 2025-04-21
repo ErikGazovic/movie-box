@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Liter&family=Lora:ital,wght@0,400..700;1,400..700&family=Outfit:wght@100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Liter&family=Lora:ital,wght@0,400..700;1,400..700&family=Outfit:wght@100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <title>MovieBox</title>
+</head>
+<body>
+    <header class="header">
+        <nav class="navbar">
+            <div class="container">
+                <a href="/"><h4>Movie<span>BOX</span></h4></a>
+                <ul role="list" class="header-list">
+                    <li class="header-li"><a href="/logout" class="flex-center">Log Out</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <section class="user-review-details">
+        <h2 class="user-name">
+            <%= username %>
+        </h2>
+        <div class="content">
+            <div class="upper-section">
+                <div class="movie-info-details">
+                    <h2 class="movie-title-details">
+                        <%= review.title %>
+                    </h2>
+                    <p class="autor-director-details parag"><%= review.director %></p>
+                    <p class="release-date-details parag"><%= review.release_date %> • <%= review.runtime %> min</p>
+                    <p class="genre-details parag"><span class="highlight">Genre: </span><%= review.genre %></p>
+                    <p class="actros-details parag"><span class="highlight">Cast: </span><%= review.actors %></p>
+                    <p class="parag brief-summary">"<%= review.plot %>"</p>
+                    <div class="other-ratings">
+                        <div class="popular-ratings annoying">
+                            <img src="../../images/Rotten_Tomatoes_logo.svg.png" alt="">
+                            <p><%= review.rating_rt %>%</p>
+                        </div>
+                        <div class="popular-ratings">
+                            <img src="../../images/Metacritic-logo.webp" alt="">
+                            <p><%= review.rating_mc %>%</p>
+                        </div>
+                        <div class="popular-ratings">
+                            <img src="../../images/IMDb_logo.png" alt="">
+                            <div class="annoying2">
+                                <% if (review.rating_imdb % Math.floor(review.rating_imdb) === 0) { %>
+                                <% review.rating_imdb = Number.parseFloat(review.rating_imdb).toFixed(1); %>
+                                <p><%= review.rating_imdb %></p>
+                                <% } else {%>
+                                    <p><%= review.rating_imdb %></p>
+                                <% } %>
+                                <img src="../../images/star.png" alt="" class="random-star">
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="poster-rating">
+                    <div class="poster-rating-img">
+                        <img src="<%= review.poster_url %>" alt="">
+                    </div>
+                    
+                    <div class="rating-details">
+                        <% for(var i = 1; i <= review.user_rating; i++) { %>
+                        <img src="../../images/star.png" alt="">
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+
+            <p class="highlight parag bigger">Review:</p>
+            <div class="review-box">
+                <p class="review-details parag"><%= review.user_review %>
+                </p>
+            </div>
+
+            <p class="box-office-details parag"><span class="highlight">Box Office: </span><%= review.box_office %></p>
+            <p class="last-changes-details parag"><span class="highlight">Upload Date: </span><%= review.upload_date %></p>
+            <div class="edit-delete-btns">
+                    <input type="hidden" value="<%= username %>" name="username">
+                    <button class="edit btn"><a href="/<%= username %>/edit-review/userID=<%= review.user_id %>&reviewID=<%= review.id %>">EDIT</a></button>
+                </form>
+                
+                <button class="delete btn fake">DELETE</button>
+            </div>
+        </div>
+        <div class="warning">
+            <img src="../../images/warning.png" alt="">
+            <div class="warning-left">
+                <p>Are you sure you want to delete this review?</p>
+                <div class="edit-delete-btns2">
+                    <button class="btn cancel real">No, Cancel</button>
+                    <form action="/delete/userID=<%= review.user_id %>/review-id=<%= review.id %>" method="POST">
+                        <input type="hidden" value="<%= username %>" name="username">
+                        <button type="submit" class="delete-real btn real">Yes, Delete</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="black-bg-warning">
+
+        </div>
+    </section>
+    <script>
+        const uploadDateLongs = document.querySelectorAll(".last-changes-details");
+        for (let uploadDateLong of uploadDateLongs) {
+            let shortDate = uploadDateLong.innerText.split(" ").slice(3, 6).join(" ");
+            uploadDateLong.innerHTML = "<span class='highlight'>Upload Date: </span> " + shortDate;
+        }
+        const deleteBtn = document.querySelector(".delete");
+        const cancelBtn = document.querySelector(".cancel");
+        const popUpWindow = document.querySelector(".warning");
+        const blackBg = document.querySelector(".black-bg-warning");
+
+        deleteBtn.addEventListener("click", function () {
+            popUpWindow.style.display = "grid";
+            blackBg.style.opacity = "0.4";
+            blackBg.style.zIndex = "3";
+        });
+
+        cancelBtn.addEventListener("click", function () {
+            popUpWindow.style.display = "none";
+            blackBg.style.opacity= "0";
+            blackBg.style.zIndex = "-1";
+        });
+    </script>
+    <footer>
+        <div class="container">
+            <div>
+                <p class="color-whitesmoke">Copyright © since 2025</p>
+            </div>
+                <ul role="list" data-type="media-icons">
+                    <li><a href="#"><img src="../../images/facebook.svg"></a></li>
+                    <li><a href="#"><img src="../../images/instagram.svg"></a></li>
+                    <li><a href="#"><img src="../../images/tiktok.svg"></a></li>
+                    <li><a href="#"><img src="../../images/twitch.svg"></a></li>
+                    <li><a href="#"><img src="../../images/twitter.svg"></a></li>
+                </ul>
+        </div>
+    </footer>
+</body>
+</html>

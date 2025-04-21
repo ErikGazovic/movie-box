@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Liter&family=Lora:ital,wght@0,400..700;1,400..700&family=Outfit:wght@100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    
+    <title>MovieBox</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="index.js" charset="UTF-8" defer></script>
+</head>
+
+<div class="loading-bg">
+    <div class="loader">
+            
+    </div>
+</div>
+<%- include("partials/header.ejs") %>
+
+<section class="auth-section">
+    <div class="auth-form flex-center">
+        <form action="/register"  method="POST" class="reg">
+            <h2 class="auth-heading">REGISTER</h2>
+            <div>
+                <label for="email">Email</label>
+                <input id="email" type="email" name="email" placeholder="email@mail.com" class="not-remember" />
+                
+            </div>
+            <% if (locals.message) { %>
+                <p class="error-msg"><%= message %></p>
+                <% } %>
+            <div>
+                <label for="password">Password</label>
+                <input id="password" type="password" name="password" value="" class="not-remember" placeholder="[6-20] characters" />
+                <div class="set-visible view-pass z-i-pos"><%- include("../public/images/eye-visible.svg") %></div>
+                <div class="set-visible hide-pass z-i-neg"><%- include("../public/images/set-invisible.svg") %></div>
+                
+                    <% if (locals.passwordMessage) { %>
+                        <p class="error-msg"><%= passwordMessage %></p>
+                        <% } %>
+            </div>
+                <p class="generate-pass">Generate strong password<%- include("../public/images/key.svg") %></p>
+            <div>
+                <label for="rep-password">Repeat Password</label>
+                <input id="rep-password" type="password" name="rep-password" value="" class="not-remember" />
+                <div class="set-visible view-rep z-i-pos"><%- include("../public/images/eye-visible.svg") %></div>
+                <div class="set-visible hide-rep z-i-neg"><%- include("../public/images/set-invisible.svg") %></div>
+                
+            </div>
+                <input type="submit" value="Sign In" class="main-submit register flex-center"/>
+            <div class="last">
+                <p style="color: whitesmoke;">Already have an account? <a href="/login" alt="Dont have and account link">Log in</a></p>
+            </div>
+            
+        </form>
+        
+    </div>
+
+    
+</section>
+<script>
+    document.querySelector("#password").setAttribute("value", "");
+    const alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+    const numbers  = "1234567890".split("");
+    const symbols = "+-()&#%$".split("");
+    document.querySelector(".generate-pass").addEventListener("click", function () {
+        
+        let randomPass = "";
+    
+        for (var i = 0; i < 6; i++) {
+            const randomNumLetters = Math.floor(Math.random() * alphabet.length);
+            randomPass = randomPass.concat(alphabet[randomNumLetters]);
+        }
+    
+        for (var i = 0; i < 4; i++) {
+            const randomNumNum = Math.floor(Math.random() * numbers.length);
+            randomPass = randomPass.concat(numbers[randomNumNum]);
+        }
+    
+        for (var i = 0; i < 2; i++) {
+            const randomNumSym = Math.floor(Math.random() * symbols.length);
+            randomPass = randomPass.concat(symbols[randomNumSym]);
+        }
+    
+        let randomPassFinal = randomPass.split("");
+    
+        for (var i = randomPassFinal.length - 1; i > 0; i--) {
+            const lastRandom = Math.floor(Math.random() * randomPassFinal.length);
+            let temp = randomPassFinal[i];
+            randomPassFinal[i] = randomPassFinal[lastRandom];
+            randomPassFinal[lastRandom] = temp;
+        }
+    
+        let finalPassword = "";
+    
+        for (var i = 0; i < randomPassFinal.length; i++) {
+            finalPassword = finalPassword.concat(randomPassFinal[i]);
+        }
+        document.querySelector("#password").setAttribute("value", finalPassword);
+        document.querySelector("#password").value = finalPassword;
+        document.querySelector("#rep-password").setAttribute("value", finalPassword);
+        document.querySelector("#rep-password").value = finalPassword;
+    })
+    
+    
+    document.querySelector(".view-pass").addEventListener("click", function () {
+        
+        document.querySelector("#password").setAttribute("type", "text");
+        document.querySelector(".view-pass").style.zIndex = "-2";
+        document.querySelector(".hide-pass").style.zIndex = "2";
+    });
+    
+    document.querySelector(".hide-pass").addEventListener("click", function () {
+        
+        document.querySelector("#password").setAttribute("type", "password");
+        document.querySelector(".view-pass").style.zIndex = "1";
+        document.querySelector(".hide-pass").style.zIndex = "-1";
+    
+    });
+
+    document.querySelector(".view-rep").addEventListener("click", function () {
+        
+        document.querySelector("#rep-password").setAttribute("type", "text");
+        document.querySelector(".view-rep").style.zIndex = "-2";
+        document.querySelector(".hide-rep").style.zIndex = "2";
+    });
+    
+    document.querySelector(".hide-rep").addEventListener("click", function () {
+        
+        document.querySelector("#rep-password").setAttribute("type", "password");
+        document.querySelector(".view-rep").style.zIndex = "1";
+        document.querySelector(".hide-rep").style.zIndex = "-1";
+    
+    });
+
+    document.querySelector(".main-submit").addEventListener("click", function () {
+        document.querySelector(".loader").classList.add("display-block");
+        document.querySelector(".loading-bg").classList.add("display-block");
+    });
+</script>
+
+<%- include("partials/footer.ejs") %>

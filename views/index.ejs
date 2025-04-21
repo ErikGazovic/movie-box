@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Liter&family=Lora:ital,wght@0,400..700;1,400..700&family=Outfit:wght@100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <title>MovieBox</title>
+</head>
+<%- include("partials/header.ejs") %>
+    <main>
+        <div class="main-page flex-center">
+            <h1>MOVIE <span class="main-span">BOX</span></h1>
+            <h3>Create your own movie portfolio and <br> become a critic</h3>
+            <div class="main-button-div">
+                <a href="/login" alt="Login button">Log In</a>
+                <a href="/register" alt="Sign button">Sign In</a>
+            </div>
+            
+        </div>
+    </main>
+    <script>
+        const mainHeading = document.querySelector("h1");
+        const mainHeadingSpan = document.querySelector(".main-span");
+        const bg = document.querySelector("main");
+        bg.addEventListener("mouseover", function () {
+            mainHeading.style.transitionDuration = "2s";
+            mainHeadingSpan.style.transitionDuration = "2s";
+            mainHeading.classList.add("reveal");
+            mainHeadingSpan.classList.add("reveal-span");
+            bg.style.backgroundColor = "rgb(0 0 0 / 0.2)";
+            setTimeout(() => {
+                mainHeading.style.transitionDuration = "0s";
+                mainHeadingSpan.style.transitionDuration = "0s";
+            }, 2000);
+            
+        })
+    </script>
+<%- include("partials/footer.ejs") %>

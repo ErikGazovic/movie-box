@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <% if (locals.userID) { %>
+        <link rel="stylesheet" href="../../styles.css">
+        <% } else {%>
+            <link rel="stylesheet" href="../../../styles.css">
+            <% }%>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Liter&family=Lora:ital,wght@0,400..700;1,400..700&family=Outfit:wght@100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    
+    <title>MovieBox</title>
+</head>
+<body>
+    <header class="header">
+        <nav class="navbar">
+            <div class="container">
+                <a href="/"><h4>Movie<span>BOX</span></h4></a>
+                <ul role="list" class="header-list">
+                    <li class="header-li"><a href="/logout" class="flex-center">Log Out</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <section class="movie-details">
+        <h2 class="user-name">
+            <%= username %>
+        </h2>
+        <fieldset> 
+            <% if (locals.userID) { %>
+                <form action="/add" method="POST" class="create-review">
+                    <input type="hidden" value="<%= username %>" name="username">
+                    <input type="hidden" value="<%= userID %>" name="userID">
+                    <h2 class="review-heading">Write Your Review</h2>
+                    <div class="select-title">
+                        <label for="title">Title</label>
+                        <input id="title" type="text" name="title" placeholder="e.g.: Avengers: Endgame (2019)">
+                        <% if (locals.movieErrorMsg) { %>
+                            <p class="error-msg-review"><%= movieErrorMsg %></p>
+                            <% } %>
+                    </div>
+                    <div class="select-rating">
+                        <label>Rating</label>
+                        <div class="star-rating" id="rating">
+                                <img src="../../images/empty-star.png" alt="" class="star-img" value="1" id="1">
+                                <img src="../../images/empty-star.png" alt="" class="star-img" value="2" id="2">
+                                <img src="../../images/empty-star.png" alt="" class="star-img" value="3" id="3">
+                                <img src="../../images/empty-star.png" alt="" class="star-img" value="4" id="4">
+                                <img src="../../images/empty-star.png" alt="" class="star-img" value="5" id="5">
+                        </div>
+                        <input type="hidden" name="rating-value" id="starValue">
+                    </div>
+                    <% if (locals.ratingErrorMsg) { %>
+                        <p class="error-msg-review"><%= ratingErrorMsg %></p>
+                        <% } %>
+                    <div class="add-review">
+                        <label for="review">Review</label>
+                        <textarea name="review" id="review"></textarea>
+                    </div>
+                    <button type="submit" class="save-changes">SAVE</button>
+                </form>
+            <% } else { %>
+            <form action="/edit" method="POST" class="create-review">
+                <h2 class="review-heading">Edit Your Review</h2>
+                <input type="hidden" name="getUserId" value="<%= userid %>">
+                <input type="hidden" name="getReviewId" value="<%= reviewID %>">
+                <input type="hidden" name="username" value="<%= username %>">
+                <div class="select-title">
+                    <label for="title">Title</label>
+                    <input id="title" type="text" name="title" value="<%= reviewData.title %>">
+                    <% if (locals.movieErrorMsg) { %>
+                        <p class="error-msg-review"><%= movieErrorMsg %></p>
+                        <% } %>
+                </div>
+                <div class="select-rating">
+                    <label>Rating</label>
+                    <div class="star-rating" id="rating">
+                            <img src="../../images/empty-star.png" alt="" class="star-img" value="1" id="1">
+                            <img src="../../images/empty-star.png" alt="" class="star-img" value="2" id="2">
+                            <img src="../../images/empty-star.png" alt="" class="star-img" value="3" id="3">
+                            <img src="../../images/empty-star.png" alt="" class="star-img" value="4" id="4">
+                            <img src="../../images/empty-star.png" alt="" class="star-img" value="5" id="5">
+                    </div>
+                    <input type="hidden" name="rating-value" id="starValue">
+                </div>
+                <% if (locals.ratingErrorMsg) { %>
+                    <p class="error-msg-review"><%= ratingErrorMsg %></p>
+                    <% } %>
+                <div class="add-review">
+                    <label for="review">Review</label>
+                    <textarea name="review" id="review"><%= reviewData.user_review %></textarea>
+                </div>
+                <button type="submit" class="save-changes">SAVE</button>
+            </form>
+            <% } %>
+            
+        </fieldset>
+    </section>
+    <script>
+
+        const imgList = document.querySelectorAll(".star-img");
+        let value;
+        const hiddenInput = document.getElementById("starValue");
+
+
+        for (var i = 0; i <= imgList.length; i++ ) {
+            imgList[i].addEventListener("click", function () {
+                this.setAttribute("src", "../../images/star.png");
+                value = this.getAttribute("value");
+                
+                for (var i = value; i <= imgList.length; i++) {
+                    document.getElementById(i).setAttribute("src", "../../images/star.png");
+                }
+                for (var i = value - 1; i > 0; i--) {
+                    document.getElementById(i).setAttribute("src", "../../images/empty-star.png");
+                }
+                switch (value) {
+                    case "5" : value = 1;
+                    break;
+                    case "4" : value = 2;
+                    break;
+                    case "2" : value = 4;
+                    break;
+                    case "1" : value = 5;
+                    break;
+                    default: break;
+                }
+                hiddenInput.setAttribute("value", value);
+                console.log(hiddenInput.getAttribute("value"));
+                return;
+            })
+        }
+
+
+    </script>
+    <footer>
+        <div class="container">
+            <div>
+                <p class="color-whitesmoke">Copyright © since 2025</p>
+            </div>
+                <ul role="list" data-type="media-icons">
+                    <li><a href="#"><img src="../../images/facebook.svg"></a></li>
+                    <li><a href="#"><img src="../../images/instagram.svg"></a></li>
+                    <li><a href="#"><img src="../../images/tiktok.svg"></a></li>
+                    <li><a href="#"><img src="../../images/twitch.svg"></a></li>
+                    <li><a href="#"><img src="../../images/twitter.svg"></a></li>
+                </ul>
+        </div>
+    </footer>
+</body>
+</html>

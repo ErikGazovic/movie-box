@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Liter&family=Lora:ital,wght@0,400..700;1,400..700&family=Outfit:wght@100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    
+    <title>MovieBox</title>
+</head>
+<div class="loading-bg">
+    <div class="loader">
+            
+    </div>
+</div>
+<%- include("partials/header.ejs") %>
+<section class="auth-section">
+    <div class="auth-form flex-center">
+        <form action="/login"  method="POST">
+            <h2 class="auth-heading">LOG IN</h2>
+            <div>
+                <label for="email">Email</label>
+                <input id="email" type="email" name="email" value="" class="not-remember"/>
+            </div>
+            <% if (locals.message) { %>
+                <p class="error-msg"><%= message %></p>
+            <% } %>
+            <div class="hello">
+                <label for="password">Password</label>
+                <input id="password" type="password" name="password" value="" class="not-remember"/>
+                <div class="set-visible view-pass z-i-pos"><%- include("../public/images/eye-visible.svg") %></div>
+                <div class="set-visible hide-pass z-i-neg"><%- include("../public/images/set-invisible.svg") %></div>
+                <% if (locals.passwordMessage) { %>
+                    <p class="error-msg"><%= passwordMessage %></p>
+                <% } %>
+            </div>
+                <label class="remember-me flex-center">Remember Me
+                    <input type="checkbox" name="remember"/>
+                    <span class="my-checkbox"></span>
+                </label>
+          
+                
+            <input type="submit" value="Log In" class="main-submit login flex-center" />
+            <div class="last">
+                <p style="color: whitesmoke;">Don't have an account? <a href="/register" alt="Dont have and account link">Register</a></p>
+            </div>
+            
+        </form>
+    </div>
+
+</section>
+<script>
+    document.querySelector(".view-pass").addEventListener("click", function () {
+        
+        document.querySelector("#password").setAttribute("type", "text");
+        document.querySelector(".view-pass").style.zIndex = "-2";
+        document.querySelector(".hide-pass").style.zIndex = "2";
+    });
+    
+    document.querySelector(".hide-pass").addEventListener("click", function () {
+        
+        document.querySelector("#password").setAttribute("type", "password");
+        document.querySelector(".view-pass").style.zIndex = "1";
+        document.querySelector(".hide-pass").style.zIndex = "-1";
+    
+    });
+
+
+    document.querySelector(".main-submit").addEventListener("click", function () {
+        document.querySelector(".loader").classList.add("display-block");
+        document.querySelector(".loading-bg").classList.add("display-block");
+        setTimeout(() => {
+            document.querySelector(".loader").classList.remove("display-block");
+            document.querySelector(".loading-bg").classList.remove("display-block");
+        }, 1000);
+
+    });
+</script>
+<footer>
+    <div class="container">
+        <div>
+            <p class="color-whitesmoke">Copyright © since 2025</p>
+        </div>
+            <ul role="list" data-type="media-icons">
+                <li><a href="#"><img src="../images/facebook.svg"></a></li>
+                <li><a href="#"><img src="../images/instagram.svg"></a></li>
+                <li><a href="#"><img src="../images/tiktok.svg"></a></li>
+                <li><a href="#"><img src="../images/twitch.svg"></a></li>
+                <li><a href="#"><img src="../images/twitter.svg"></a></li>
+            </ul>
+    </div>
+</footer>
+</body>
+</html>
