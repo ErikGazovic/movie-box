@@ -58,6 +58,7 @@
 
                 <div class="user-list-container">
                     <div class="user-list">
+                        <p class="no-reviews-text">No results found...</p>
                             <div class="loader-user-list">
 
                             </div>
@@ -123,10 +124,11 @@
     </html>
     </div>
     <script>
-        if (document.querySelectorAll(".list-item").length === 0) {
-            document.querySelector(".user-list").innerHTML = "<p class='no-reviews-text'>THIS USER DIDN'T ADD ANY REVIEWS</p>";
-        }
-                const uploadDateLongs = document.querySelectorAll(".last-changes-applied");
+        
+
+        const uploadDateLongs = document.querySelectorAll(".last-changes-applied");
+
+
         for (let uploadDateLong of uploadDateLongs) {
             let shortDate = uploadDateLong.innerText.split(" ").slice(3, 6).join(" ");
             uploadDateLong.innerHTML = "<span class='content-span'>Last Changes: </span> " + shortDate;
@@ -342,11 +344,12 @@
 
 
         }
-
+        document.querySelector(".no-reviews-text").style.display = "none";
         const searchButton = document.querySelector(".search-button");
         const movieTitles = document.querySelectorAll(".movie-title");
         let searchedMovie;
         searchButton.addEventListener("click", () => {
+            document.querySelector(".no-reviews-text").style.display = "none";
             searchedMovie = document.querySelector(".search-movie-input").value;
             document.querySelector(".loader-user-list").style.display = "block";
             for (var i = 0; i < userReviews.length; i++) {
@@ -362,23 +365,27 @@
                 let count = 0;
                 let reviewsCount = document.querySelectorAll(".list-item").length;
             for (var i = 0; i < movieTitles.length; i++) {
-                let movieTitle = movieTitles[i].innerText;
+                let movieTitle = movieTitles[i].innerText.toLowerCase();
                 movieTitles[i].parentNode.parentNode.parentNode.parentNode.style.display = "block";
 
-                if (!movieTitle.includes(searchedMovie)) {
+                if (!movieTitle.includes(searchedMovie.toLowerCase())) {
                     count++;
                     movieTitles[i].parentNode.parentNode.parentNode.parentNode.style.display = "none";
 
                 }
                 if (count === reviewsCount) {
-                    movieTitles[i].parentNode.parentNode.parentNode.parentNode.style.display = "block";
-                    document.querySelector(".user-list").innerHTML = "<p class='no-reviews-text'>NO RESULTS FOUND</p>";
+                    movieTitles[i].parentNode.parentNode.parentNode.parentNode.style.display = "none";
+                    document.querySelector(".no-reviews-text").style.display = "block";
+                } else {
+                    document.querySelector(".no-reviews-text").style.display = "none";
                 }
             }
             }, 800);
         });
 
-        
+        if (document.querySelectorAll(".list-item").length === 0) {
+            document.querySelector(".user-list").innerHTML = "<p class='no-reviews-text' style='display: block'>This user didn't add any reviews</p>";
+        }
 
             
     </script>

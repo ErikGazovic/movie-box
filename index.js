@@ -6,10 +6,12 @@ import bcrypt from "bcrypt";
 import { Strategy } from "passport-local";
 import passport from "passport";
 import axios from "axios";
+import env from "dotenv";
 
 const app = express();
 const port = 3000;
 const saltRounds = 6;
+env.config();
 
 const year = new Date().getFullYear();
 
@@ -19,7 +21,7 @@ app.use(express.static("public"));
 
 
 app.use(session({
-    secret: "SECRET",
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
     cookie: {
@@ -31,15 +33,16 @@ app.use(passport.session());
 
 
 const db = new pg.Client({
-    user: "postgres",
-    host: "localhost",
-    database: "MovieBox",
-    password: "PostgresDBPass",
-    port: 5432,
+    user: process.env.DB_USER,
+    host: process.env.DB_HOST,
+    database: process.env.DB_DATABASE,
+    password: process.env.DB_PASSWORD,
+    port: process.env.DB_PORT,
   });
-  db.connect();
 
-const movieAPIKey = "362b3621";
+db.connect();
+
+const movieAPIKey = process.env.MOVIE_DB_API_KEY;
 const movieDataURL = "http://www.omdbapi.com/?";
 
 app.get("/", (req, res) => {
@@ -57,7 +60,6 @@ app.post("/login", (req, res) => {
             const userId = user.id;
             const email = user.email;
             const username = email.split("@")[0];
-            // If the user exists log him in:
             req.session.isLoggedIn = true;
             if (req.body.remember === "on") {
                 setTimeout(() => {
