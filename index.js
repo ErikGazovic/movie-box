@@ -21,7 +21,7 @@ app.use(express.static("public"));
 
 
 app.use(session({
-    secret: process.env.SESSION_SECRET, // YOUR SECRET //
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
     cookie: {
@@ -33,16 +33,16 @@ app.use(passport.session());
 
 
 const db = new pg.Client({
-    user: process.env.DB_USER, // YOUR USERNAME FOR PostgreSQL //
-    host: process.env.DB_HOST, // YOUR LOCALHOST //
-    database: process.env.DB_DATABASE, // NAME OF YOUR DATABASE//
-    password: process.env.DB_PASSWORD, // YOUR PostgreSQL PASSWORD //
-    port: process.env.DB_PORT, // YOUR PORT //
+    user: process.env.DB_USER,
+    host: process.env.DB_HOST,
+    database: process.env.DB_DATABASE,
+    password: process.env.DB_PASSWORD,
+    port: process.env.DB_PORT,
   });
 
 db.connect();
 
-const movieAPIKey = process.env.MOVIE_DB_API_KEY; // YOUR OMDBAPI API KEY //
+const movieAPIKey = process.env.MOVIE_DB_API_KEY;
 const movieDataURL = "http://www.omdbapi.com/?";
 
 app.get("/", (req, res) => {
@@ -157,7 +157,7 @@ app.post("/register", async (req, res) => {
                 setTimeout(() => {
                     const user = result.rows[0];
                     req.login(user, (err) => {
-                        res.redirect("/user-page-");
+                        res.redirect("/login");
                     }, 1000)});      
                 }
             })
