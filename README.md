@@ -1,6 +1,13 @@
 # movie-box
 Website for adding your movie reviews
 
+CODE EDITOR: VSCODE
+
+TECHNOLOGY
+Frontend: HTML5, CSS, Javascript
+Backend: Node.js, Express.js
+Database: PostgreSQL
+
 TO SET UP THE WEBSITE
 1. download zip file and extract it
 2. open new terminal and write npm install to import all dependecies
