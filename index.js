@@ -105,7 +105,7 @@ passport.use(
     { usernameField: "email", passwordField: "password" },
     async function verify(email, password, cb) {
       try {
-        const checkResult = await db.query(
+        const checkResult = await pool.query(
           "SELECT * FROM users WHERE email = $1",
           [email]
         );
@@ -172,7 +172,7 @@ app.post("/register", async (req, res) => {
         if (err) {
           res.send(err);
         } else {
-          const result = await db.query(
+          const result = await pool.query(
             "INSERT INTO users (email, password) VALUES ($1, $2) RETURNING *",
             [email, hash]
           );
@@ -661,4 +661,5 @@ function checkRegisterPassword(password, reppeatedPassword) {
     return true;
   }
 }
+
 
