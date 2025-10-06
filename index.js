@@ -1,6 +1,7 @@
 import express from "express";
 import bodyParser from "body-parser";
 import pg from "pg";
+import { Pool } from "pg";
 import session from "express-session";
 import bcrypt from "bcrypt";
 import { Strategy } from "passport-local";
@@ -14,6 +15,11 @@ const saltRounds = 6;
 env.config();
 
 const year = new Date().getFullYear();
+
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: { rejectUnauthorized: false } // important for Render PostgreSQL
+});
 
 
 app.use(bodyParser.urlencoded({ extended: true }));
