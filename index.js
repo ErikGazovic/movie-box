@@ -1,13 +1,19 @@
 import express from "express";
 import bodyParser from "body-parser";
 import pg from "pg";
-import { Pool } from "pg";
 import session from "express-session";
 import bcrypt from "bcrypt";
 import { Strategy } from "passport-local";
 import passport from "passport";
 import axios from "axios";
 import env from "dotenv";
+import pkg from 'pg';
+const { Pool } = pkg;
+
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: { rejectUnauthorized: false }
+});
 
 const app = express();
 const port = 3000;
@@ -15,12 +21,6 @@ const saltRounds = 6;
 env.config();
 
 const year = new Date().getFullYear();
-
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: { rejectUnauthorized: false } // important for Render PostgreSQL
-});
-
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
