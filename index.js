@@ -38,15 +38,15 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 
-const db = new pg.Client({
-    user: process.env.DB_USER,
-    host: process.env.DB_HOST,
-    database: process.env.DB_DATABASE,
-    password: process.env.DB_PASSWORD,
-    port: process.env.DB_PORT,
-  });
-
-db.connect();
+//const db = new pg.Client({
+//    user: process.env.DB_USER,
+//    host: process.env.DB_HOST,
+//    database: process.env.DB_DATABASE,
+//    password: process.env.DB_PASSWORD,
+//    port: process.env.DB_PORT,
+//  });
+//
+//db.connect();
 
 const movieAPIKey = process.env.MOVIE_DB_API_KEY;
 const movieDataURL = "http://www.omdbapi.com/?";
@@ -142,7 +142,7 @@ app.post("/register", async (req, res) => {
 
    
   try {
-    const checkResult = await db.query("SELECT * FROM users WHERE email = $1", [email,]);
+    const checkResult = await pool.query("SELECT * FROM users WHERE email = $1", [email,]);
     if (checkResult.rows.length > 0) {
         let message = "User with this email already exists";
       res.render("register.ejs", {message: message});
@@ -179,7 +179,7 @@ app.get("/user-page-:id/:name", async (req, res) => {
     const username = req.params.name;
     if (isLoggedIn) {
         try {
-            const result = await db.query(`SELECT * FROM user_reviews WHERE user_id = ${userid} ORDER BY upload_date DESC`);
+            const result = await pool.query(`SELECT * FROM user_reviews WHERE user_id = ${userid} ORDER BY upload_date DESC`);
             const userReviews = result.rows;
             res.render("user-page.ejs", {userid : userid, userReviews : userReviews, username: username});
         } catch (err) {
@@ -201,7 +201,7 @@ app.get("/:name/user-review/review-id=:id", async (req, res) => {
     const user_review_id = req.params.id;
     const username = req.params.name;
     try {
-        const result = await db.query(`SELECT * FROM user_reviews WHERE id = ${user_review_id}`);
+        const result = await pool.query(`SELECT * FROM user_reviews WHERE id = ${user_review_id}`);
         let review = result.rows[0];
         res.render("user-review.ejs", {review : review, username: username});
     } catch (err) {
@@ -287,7 +287,7 @@ app.post("/add", async (req, res) => {
             console.log(fullDate);
             
             try {
-                await db.query("INSERT INTO user_reviews " + 
+                await pool.query("INSERT INTO user_reviews " + 
                     "(user_id, title, director, genre, actors, plot, release_date, runtime, user_rating, user_review, box_office, rating_imdb, rating_rt, rating_mc, poster_url, upload_date)" +
                     " VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16)"
                     , [
@@ -323,7 +323,7 @@ app.get("/:name/edit-review/userID=:userID&reviewID=:id", async (req, res) => {
     const userid = req.params.userID;
     const username = req.params.name;
     try {
-        const result = await db.query(`SELECT * FROM user_reviews WHERE id = ${reviewID}`);
+        const result = await pool.query(`SELECT * FROM user_reviews WHERE id = ${reviewID}`);
         const reviewData = result.rows[0];
         res.render("edit-add-review.ejs", {reviewData: reviewData, userid: userid, reviewID: reviewID, username: username});
     } catch (err) {
@@ -378,12 +378,12 @@ app.post("/edit", async (req, res) => {
 
 
     if (resultData.data["Error"] === "Movie not found!") {
-        const result = await db.query(`SELECT * FROM user_reviews WHERE id = ${reviewID}`);
+        const result = await pool.query(`SELECT * FROM user_reviews WHERE id = ${reviewID}`);
         const reviewData = result.rows[0];
         let movieNotFoundMessage = "Movie Not Found!";
         res.render(`edit-add-review.ejs`, {username : username, movieErrorMsg: movieNotFoundMessage, userid : userID, reviewID : reviewID, reviewData : reviewData} );
     } else if (!req.body["rating-value"]) {
-        const result = await db.query(`SELECT * FROM user_reviews WHERE id = ${reviewID}`);
+        const result = await pool.query(`SELECT * FROM user_reviews WHERE id = ${reviewID}`);
         const reviewData = result.rows[0];
         let ratingNotSelectedMessage = "You have to select rating";
         res.render(`edit-add-review.ejs`, {username : username, ratingErrorMsg: ratingNotSelectedMessage, userid : userID, reviewID : reviewID, reviewData : reviewData} );
@@ -416,7 +416,7 @@ app.post("/edit", async (req, res) => {
         };
 
         try {
-            await db.query(`UPDATE user_reviews 
+            await pool.query(`UPDATE user_reviews 
                 SET (user_id, title, director, genre, actors, plot, release_date, runtime, user_rating, user_review, box_office, rating_imdb, rating_rt, rating_mc, poster_url, upload_date) = 
                 ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16)
                 WHERE id = ${reviewID}`, 
@@ -451,7 +451,7 @@ app.post("/delete/userID=:userID/review-id=:id", async (req, res) => {
     const userID = req.params.userID;
     const username = req.body.username;
     try {
-        await db.query(`DELETE FROM user_reviews WHERE id = ${reviewID}`);
+        await pool.query(`DELETE FROM user_reviews WHERE id = ${reviewID}`);
         res.redirect(`/user-page-${userID}/${username}`);
     } catch (err) {
         res.send("Something went wrong");
