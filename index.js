@@ -53,7 +53,7 @@ const movieDataURL = "http://www.omdbapi.com/?";
 
 async function createTables() {
   await pool.query(
-    "CREATE TABLE IF NOT EXISTS users ( id SERIAL PRIMARY KEY, email VARCHAR(70), password VARCHAR(100) )"
+    "CREATE TABLE IF NOT EXISTS users ( id SERIAL PRIMARY KEY, username VARCHAR(20), email VARCHAR(70), password VARCHAR(100) )"
   );
 
   await pool.query(
@@ -173,7 +173,7 @@ app.post("/register", async (req, res) => {
           res.send(err);
         } else {
           const result = await pool.query(
-            "INSERT INTO users (email, password) VALUES ($1, $2) RETURNING *",
+            "INSERT INTO users (username, email, password) VALUES ('', $1, $2) RETURNING *",
             [email, hash]
           );
           setTimeout(() => {
@@ -661,5 +661,3 @@ function checkRegisterPassword(password, reppeatedPassword) {
     return true;
   }
 }
-
-
