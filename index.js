@@ -56,6 +56,11 @@ async function createTables() {
     "CREATE TABLE IF NOT EXISTS users ( id SERIAL PRIMARY KEY, username VARCHAR(20), email VARCHAR(70), password VARCHAR(100) )"
   );
 
+  await pool.query(`
+  ALTER TABLE users
+  ADD COLUMN IF NOT EXISTS username VARCHAR(20)
+`);
+
   await pool.query(
     "CREATE TABLE IF NOT EXISTS user_reviews ( id SERIAL PRIMARY KEY, user_id integer, title VARCHAR(150), director VARCHAR(100), genre VARCHAR(70), actors VARCHAR(100), plot VARCHAR(300), release_date VARCHAR(12), runtime integer, user_rating integer, user_review VARCHAR, box_office VARCHAR(12), rating_imdb float, rating_rt integer, rating_mc integer, poster_url VARCHAR(200), upload_date date )"
   );
@@ -661,3 +666,4 @@ function checkRegisterPassword(password, reppeatedPassword) {
     return true;
   }
 }
+
