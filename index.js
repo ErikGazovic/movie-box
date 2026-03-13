@@ -55,7 +55,6 @@ async function createTables() {
   await pool.query(
     "CREATE TABLE IF NOT EXISTS users ( id SERIAL PRIMARY KEY, username VARCHAR(20), email VARCHAR(70), password VARCHAR(100) )"
   );
-
   await pool.query(`
   ALTER TABLE users
   ADD COLUMN IF NOT EXISTS username VARCHAR(20)
@@ -666,4 +665,3 @@ function checkRegisterPassword(password, reppeatedPassword) {
     return true;
   }
 }
-
