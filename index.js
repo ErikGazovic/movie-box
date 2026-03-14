@@ -7,6 +7,7 @@ import { Strategy } from "passport-local";
 import passport from "passport";
 import axios from "axios";
 import env from "dotenv";
+env.config();
 import pkg from "pg";
 const { Pool } = pkg;
 
@@ -16,10 +17,10 @@ const pool = new Pool({
 });
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 const saltRounds = 6;
-env.config();
-
+app.set("view engine", "ejs");
+app.set("trust proxy", 1);
 const year = new Date().getFullYear();
 
 app.use(bodyParser.urlencoded({ extended: true }));
