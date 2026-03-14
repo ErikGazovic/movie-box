@@ -79,6 +79,7 @@ app.get("/login", (req, res) => {
 app.post("/login", (req, res) => {
   passport.authenticate("local", (err, user, options) => {
     if (user) {
+      console.log(user);
       const userId = user.id;
       const email = user.email;
       const username = email.split("@")[0];
@@ -158,7 +159,7 @@ app.post("/register", async (req, res) => {
   const password = req.body.password;
   const repPassword = req.body["rep-password"];
   let passwordMessage = "";
-  console.log("FEWFEWFEWFEWFWF");
+  console.log(email);
   try {
     const checkResult = await pool.query(
       "SELECT * FROM users WHERE email = $1",
