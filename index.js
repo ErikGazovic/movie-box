@@ -24,15 +24,18 @@ const year = new Date().getFullYear();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 app.set("trust proxy", 1);
+
 app.use(
   session({
     secret: process.env.SESSION_SECRET,
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
     cookie: {
       maxAge: 1000 * 60 * 60 * 24,
+      secure: true,
+      sameSite: "none",
     },
-  }),
+  })
 );
 app.use(passport.initialize());
 app.use(passport.session());
