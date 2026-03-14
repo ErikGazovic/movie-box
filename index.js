@@ -1,5 +1,6 @@
 import express from "express";
 import bodyParser from "body-parser";
+import { LocalStorage } from "node-localstorage";
 import pg from "pg";
 import session from "express-session";
 import bcrypt from "bcrypt";
@@ -10,7 +11,7 @@ import env from "dotenv";
 env.config();
 import pkg from "pg";
 const { Pool } = pkg;
-
+const localStorage = new LocalStorage('./scratch');
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: { rejectUnauthorized: false },
