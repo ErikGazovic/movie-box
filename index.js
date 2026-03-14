@@ -34,7 +34,7 @@ app.use(
     cookie: {
       maxAge: 1000 * 60 * 60 * 24,
     },
-  })
+  }),
 );
 app.use(passport.initialize());
 app.use(passport.session());
@@ -54,7 +54,7 @@ const movieDataURL = "http://www.omdbapi.com/?";
 
 async function createTables() {
   await pool.query(
-    "CREATE TABLE IF NOT EXISTS users ( id SERIAL PRIMARY KEY, username VARCHAR(20), email VARCHAR(70), password VARCHAR(100) )"
+    "CREATE TABLE IF NOT EXISTS users ( id SERIAL PRIMARY KEY, username VARCHAR(20), email VARCHAR(70), password VARCHAR(100) )",
   );
   await pool.query(`
   ALTER TABLE users
@@ -62,7 +62,7 @@ async function createTables() {
 `);
 
   await pool.query(
-    "CREATE TABLE IF NOT EXISTS user_reviews ( id SERIAL PRIMARY KEY, user_id integer, title VARCHAR(150), director VARCHAR(100), genre VARCHAR(70), actors VARCHAR(100), plot VARCHAR(300), release_date VARCHAR(12), runtime integer, user_rating integer, user_review VARCHAR, box_office VARCHAR(12), rating_imdb float, rating_rt integer, rating_mc integer, poster_url VARCHAR(200), upload_date date )"
+    "CREATE TABLE IF NOT EXISTS user_reviews ( id SERIAL PRIMARY KEY, user_id integer, title VARCHAR(150), director VARCHAR(100), genre VARCHAR(70), actors VARCHAR(100), plot VARCHAR(300), release_date VARCHAR(12), runtime integer, user_rating integer, user_review VARCHAR, box_office VARCHAR(12), rating_imdb float, rating_rt integer, rating_mc integer, poster_url VARCHAR(200), upload_date date )",
   );
 
   console.log("Tables created!");
@@ -112,7 +112,7 @@ passport.use(
       try {
         const checkResult = await pool.query(
           "SELECT * FROM users WHERE email = $1",
-          [email]
+          [email],
         );
 
         if (checkResult.rows.length > 0) {
@@ -138,8 +138,8 @@ passport.use(
         console.log("error");
         return cb(err);
       }
-    }
-  )
+    },
+  ),
 );
 
 app.get("/logout", (req, res) => {
@@ -164,7 +164,7 @@ app.post("/register", async (req, res) => {
   try {
     const checkResult = await pool.query(
       "SELECT * FROM users WHERE email = $1",
-      [email]
+      [email],
     );
     if (checkResult.rows.length > 0) {
       let message = "User with this email already exists";
@@ -179,7 +179,7 @@ app.post("/register", async (req, res) => {
         } else {
           const result = await pool.query(
             "INSERT INTO users (username, email, password) VALUES ('', $1, $2) RETURNING *",
-            [email, hash]
+            [email, hash],
           );
           setTimeout(() => {
             const user = result.rows[0];
@@ -188,7 +188,7 @@ app.post("/register", async (req, res) => {
               (err) => {
                 res.redirect("/login");
               },
-              1000
+              1000,
             );
           });
         }
@@ -206,7 +206,8 @@ app.get("/user-page-:id/:name", async (req, res) => {
   if (isLoggedIn) {
     try {
       const result = await pool.query(
-        `SELECT * FROM user_reviews WHERE user_id = ${userid} ORDER BY upload_date DESC`
+        "SELECT * FROM user_reviews WHERE user_id = $1 ORDER BY upload_date DESC",
+        [userid],
       );
       const userReviews = result.rows;
       res.render("user-page.ejs", {
@@ -233,7 +234,8 @@ app.get("/:name/user-review/review-id=:id", async (req, res) => {
   const username = req.params.name;
   try {
     const result = await pool.query(
-      `SELECT * FROM user_reviews WHERE id = ${user_review_id}`
+      `SELECT * FROM user_reviews WHERE id = $1`,
+      [user_review_id],
     );
     let review = result.rows[0];
     res.render("user-review.ejs", { review: review, username: username });
@@ -309,12 +311,12 @@ app.post("/add", async (req, res) => {
       [titleChopped.length - 1].replace("(", "")
       .replace(")", "");
     resultData = await axios.get(
-      movieDataURL + `t=${cleanTitle}&y=${movieYear}&apikey=${movieAPIKey}`
+      movieDataURL + `t=${cleanTitle}&y=${movieYear}&apikey=${movieAPIKey}`,
     );
   } else {
     cleanTitle = titleYear;
     resultData = await axios.get(
-      movieDataURL + `t=${cleanTitle}&apikey=${movieAPIKey}`
+      movieDataURL + `t=${cleanTitle}&apikey=${movieAPIKey}`,
     );
   }
 
@@ -380,7 +382,7 @@ app.post("/add", async (req, res) => {
           MovieData.ratings[2],
           MovieData.poster,
           MovieData.uploadDate,
-        ]
+        ],
       );
       res.redirect(`/user-page-${userid}/${username}`);
     } catch (err) {
@@ -395,7 +397,8 @@ app.get("/:name/edit-review/userID=:userID&reviewID=:id", async (req, res) => {
   const username = req.params.name;
   try {
     const result = await pool.query(
-      `SELECT * FROM user_reviews WHERE id = ${reviewID}`
+      `SELECT * FROM user_reviews WHERE id = $1`,
+      [reviewID],
     );
     const reviewData = result.rows[0];
     res.render("edit-add-review.ejs", {
@@ -477,18 +480,19 @@ app.post("/edit", async (req, res) => {
       [titleChopped.length - 1].replace("(", "")
       .replace(")", "");
     resultData = await axios.get(
-      movieDataURL + `t=${cleanTitle}&y=${movieYear}&apikey=${movieAPIKey}`
+      movieDataURL + `t=${cleanTitle}&y=${movieYear}&apikey=${movieAPIKey}`,
     );
   } else {
     cleanTitle = titleYear;
     resultData = await axios.get(
-      movieDataURL + `t=${cleanTitle}&apikey=${movieAPIKey}`
+      movieDataURL + `t=${cleanTitle}&apikey=${movieAPIKey}`,
     );
   }
 
   if (resultData.data["Error"] === "Movie not found!") {
     const result = await pool.query(
-      `SELECT * FROM user_reviews WHERE id = ${reviewID}`
+      "SELECT * FROM user_reviews WHERE id = $1",
+      [reviewID],
     );
     const reviewData = result.rows[0];
     let movieNotFoundMessage = "Movie Not Found!";
@@ -501,7 +505,8 @@ app.post("/edit", async (req, res) => {
     });
   } else if (!req.body["rating-value"]) {
     const result = await pool.query(
-      `SELECT * FROM user_reviews WHERE id = ${reviewID}`
+      "SELECT * FROM user_reviews WHERE id = $1",
+      [reviewID],
     );
     const reviewData = result.rows[0];
     let ratingNotSelectedMessage = "You have to select rating";
@@ -560,7 +565,7 @@ app.post("/edit", async (req, res) => {
           MovieData.ratings[2],
           MovieData.poster,
           MovieData.uploadDate,
-        ]
+        ],
       );
       res.redirect(`/user-page-${userID}/${username}`);
     } catch (err) {
@@ -663,6 +668,6 @@ function checkRegisterPassword(password, reppeatedPassword) {
     let passwordMessage = "Password must contains at least 1 number";
     return [false, passwordMessage];
   } else {
-    return true;
+    return [true, ""];
   }
 }
