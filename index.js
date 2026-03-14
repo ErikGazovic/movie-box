@@ -91,6 +91,7 @@ app.post("/login", (req, res) => {
       } else {
         req.session.cookie.maxAge = 1000;
         setTimeout(() => {
+          localStorage.setItem("token", username);
           res.redirect(`/user-page-${userId}/${username}`);
         }, 1000);
       }
@@ -146,6 +147,7 @@ app.get("/logout", (req, res) => {
     if (err) {
       return next(err);
     }
+    localStorage.removeItem("token");
     res.redirect("/");
   });
 });
@@ -199,10 +201,10 @@ app.post("/register", async (req, res) => {
 });
 
 app.get("/user-page-:id/:name", async (req, res) => {
-  const isLoggedIn = req.session.isLoggedIn;
+  const token = localStorage.getItem("token");
   const userid = req.params.id;
   const username = req.params.name;
-  if (isLoggedIn) {
+  if (token !== "" || token) {
     try {
       const result = await pool.query(
         "SELECT * FROM user_reviews WHERE user_id = $1 ORDER BY upload_date DESC",
