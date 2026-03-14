@@ -19,8 +19,6 @@ const pool = new Pool({
 const app = express();
 const port = process.env.PORT || 3000;
 const saltRounds = 6;
-app.set("view engine", "ejs");
-app.set("trust proxy", 1);
 const year = new Date().getFullYear();
 
 app.use(bodyParser.urlencoded({ extended: true }));
