@@ -24,18 +24,15 @@ const year = new Date().getFullYear();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 app.set("trust proxy", 1);
-
 app.use(
   session({
     secret: process.env.SESSION_SECRET,
     resave: false,
-    saveUninitialized: false,
+    saveUninitialized: true,
     cookie: {
       maxAge: 1000 * 60 * 60 * 24,
-      secure: true,
-      sameSite: "none",
     },
-  })
+  }),
 );
 app.use(passport.initialize());
 app.use(passport.session());
@@ -202,9 +199,10 @@ app.post("/register", async (req, res) => {
 });
 
 app.get("/user-page-:id/:name", async (req, res) => {
+  const isLoggedIn = req.session.isLoggedIn;
   const userid = req.params.id;
   const username = req.params.name;
-  if (req.isAuthenticated()) {
+  if (isLoggedIn) {
     try {
       const result = await pool.query(
         "SELECT * FROM user_reviews WHERE user_id = $1 ORDER BY upload_date DESC",
