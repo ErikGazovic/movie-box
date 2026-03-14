@@ -199,10 +199,9 @@ app.post("/register", async (req, res) => {
 });
 
 app.get("/user-page-:id/:name", async (req, res) => {
-  const isLoggedIn = req.session.isLoggedIn;
   const userid = req.params.id;
   const username = req.params.name;
-  if (isLoggedIn) {
+  if (req.isAuthenticated()) {
     try {
       const result = await pool.query(
         "SELECT * FROM user_reviews WHERE user_id = $1 ORDER BY upload_date DESC",
