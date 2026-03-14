@@ -84,6 +84,8 @@ app.post("/login", (req, res) => {
       const email = user.email;
       const username = email.split("@")[0];
       req.session.isLoggedIn = true;
+
+      localStorage.setItem("token", username);
       if (req.body.remember === "on") {
         setTimeout(() => {
           res.redirect(`/user-page-${userId}/${username}`);
@@ -91,7 +93,6 @@ app.post("/login", (req, res) => {
       } else {
         req.session.cookie.maxAge = 1000;
         setTimeout(() => {
-          localStorage.setItem("token", username);
           res.redirect(`/user-page-${userId}/${username}`);
         }, 1000);
       }
