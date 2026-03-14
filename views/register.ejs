@@ -10,7 +10,6 @@
     
     <title>MovieBox</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-<script src="/index.js" charset="UTF-8" defer></script>
 </head>
 
 <div class="loading-bg">
@@ -26,7 +25,7 @@
             <h2 class="auth-heading">REGISTER</h2>
             <div>
                 <label for="email">Email</label>
-                <input id="email" type="email" name="email" placeholder="email@mail.com" class="not-remember" />
+                <input id="email" type="email" name="email" placeholder="email@mail.com" class="not-remember"  />
                 
             </div>
             <% if (locals.message) { %>
@@ -61,7 +60,7 @@
 
     
 </section>
-<script>
+<script  src="index.js" charset="UTF-8" defer>
     document.querySelector("#password").setAttribute("value", "");
     const alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
     const numbers  = "1234567890".split("");
