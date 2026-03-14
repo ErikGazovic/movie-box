@@ -52,7 +52,7 @@ const movieDataURL = "http://www.omdbapi.com/?";
 
 async function createTables() {
   await pool.query(
-    "CREATE TABLE IF NOT EXISTS users ( id SERIAL PRIMARY KEY, username VARCHAR(20), email VARCHAR(70), password VARCHAR(100) )",
+    "CREATE TABLE IF NOT EXISTS usersMovieBox ( id SERIAL PRIMARY KEY, username VARCHAR(20), email VARCHAR(70), password VARCHAR(100) )",
   );
   await pool.query(`
   ALTER TABLE users
@@ -110,7 +110,7 @@ passport.use(
     async function verify(email, password, cb) {
       try {
         const checkResult = await pool.query(
-          "SELECT * FROM users WHERE email = $1",
+          "SELECT * FROM usersMovieBox WHERE email = $1",
           [email],
         );
 
@@ -162,7 +162,7 @@ app.post("/register", async (req, res) => {
   console.log(email);
   try {
     const checkResult = await pool.query(
-      "SELECT * FROM users WHERE email = $1",
+      "SELECT * FROM usersMovieBox WHERE email = $1",
       [email],
     );
     if (checkResult.rows.length > 0) {
@@ -177,7 +177,7 @@ app.post("/register", async (req, res) => {
           res.send(err);
         } else {
           const result = await pool.query(
-            "INSERT INTO users (username, email, password) VALUES ('', $1, $2) RETURNING *",
+            "INSERT INTO usersMovieBox (username, email, password) VALUES ('', $1, $2) RETURNING *",
             [email, hash],
           );
           setTimeout(() => {
